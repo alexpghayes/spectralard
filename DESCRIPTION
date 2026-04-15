@@ -18,3 +18,5 @@ RoxygenNote: 7.3.2
 Imports:
     cli,
     fastRG
+URL: https://github.com/alexpghayes/spectralard
+BugReports: https://github.com/alexpghayes/spectralard/issues
