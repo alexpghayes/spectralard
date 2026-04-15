@@ -21,7 +21,7 @@ simulate_ard_data(n, k, corr, num_good_traits, num_bad_traits)
 A list with the following elements:
 \itemize{
 \item \code{A}: The adjacency matrix.
-\item \code{Y}: The ARD matrix.
+\item \code{ard}: The ARD matrix.
 \item \code{traits}: The node-level traits.
 \item \code{s_pop}: The population spectral decomposition.
 }
@@ -30,8 +30,20 @@ A list with the following elements:
 Simulate Aggregated Relational Data (ARD)
 }
 \examples{
+
+set.seed(42)
+
+# 1. Simulate ARD data
 sim <- simulate_ard_data(
   n = 100, k = 2, corr = 0.7,
   num_good_traits = 2, num_bad_traits = 2
 )
+
+# 2. Estimate the network model
+estimate <- estimate_spectrum(sim$ard, sim$traits)
+estimate
+
+# 3. Sample a new graph from the estimate
+g <- sample_graph(estimate)
+g
 }

@@ -9,13 +9,13 @@ test_that("estimate_spectrum and sample_graph work", {
     num_good_traits = 2, num_bad_traits = 2
   )
 
-  expect_s4_class(sim$Y, "dgeMatrix")
-  expect_equal(nrow(sim$Y), n)
+  expect_s4_class(sim$ard, "dgeMatrix")
+  expect_equal(nrow(sim$ard), n)
 
-  estimate <- estimate_spectrum(sim$Y, sim$traits)
+  estimate <- estimate_spectrum(sim$ard, sim$traits)
   expect_s3_class(estimate, "SpectralArdEstimate")
   expect_equal(nrow(estimate$Utilde), n)
-  expect_equal(ncol(estimate$Utilde), ncol(sim$Y))
+  expect_equal(ncol(estimate$Utilde), ncol(sim$ard))
 
   # Test Bernoulli sampling without self-loops
   g <- sample_graph(estimate, allow_self_loops = FALSE, poisson_edges = FALSE)

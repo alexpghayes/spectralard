@@ -15,14 +15,9 @@ left_padded_sequence <- function(x) {
 
 #' Generate data with specified correlation to a vector
 #'
-#' @param y Vector to correlate with.
 #' @param corr Target correlation value (between -1 and 1).
 #' @return A vector with the specified correlation to `y`.
-#' @export
-#' @examples
-#' y <- rnorm(100)
-#' x <- complement(y, corr = 0.8)
-#' cor(x, y)
+#' @keywords internal
 complement <- function(y, corr = 0.5) {
   x <- stats::rnorm(length(y))
   y.perp <- stats::residuals(stats::lm(x ~ y))
@@ -71,15 +66,11 @@ generate_traits <- function(U, corr, num_traits) {
 #' @param num_bad_traits Number of traits uncorrelated with latent positions.
 #' @return A list with the following elements:
 #'   - `A`: The adjacency matrix.
-#'   - `Y`: The ARD matrix.
+#'   - `ard`: The ARD matrix.
 #'   - `traits`: The node-level traits.
 #'   - `s_pop`: The population spectral decomposition.
 #' @export
-#' @examples
-#' sim <- simulate_ard_data(
-#'   n = 100, k = 2, corr = 0.7,
-#'   num_good_traits = 2, num_bad_traits = 2
-#' )
+#' @inherit estimate_spectrum examples
 simulate_ard_data <- function(n, k, corr, num_good_traits, num_bad_traits) {
   stopifnot(num_good_traits + num_bad_traits > 0)
 
@@ -138,8 +129,9 @@ simulate_ard_data <- function(n, k, corr, num_good_traits, num_bad_traits) {
 
   list(
     A = A,
-    Y = Y,
+    ard = Y,
     traits = traits,
-    s_pop = s_pop
+    s_pop = s_pop,
+    model = network_model
   )
 }

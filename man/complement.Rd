@@ -7,8 +7,6 @@
 complement(y, corr = 0.5)
 }
 \arguments{
-\item{y}{Vector to correlate with.}
-
 \item{corr}{Target correlation value (between -1 and 1).}
 }
 \value{
@@ -17,8 +15,4 @@ A vector with the specified correlation to \code{y}.
 \description{
 Generate data with specified correlation to a vector
 }
-\examples{
-y <- rnorm(100)
-x <- complement(y, corr = 0.8)
-cor(x, y)
-}
+\keyword{internal}

@@ -22,6 +22,7 @@ Imports:
     RSpectra,
     withr
 Suggests:
+    ivreg,
     pkgdown,
     testthat
 URL: https://github.com/alexpghayes/spectralard, https://alexpghayes.github.io/spectralard/

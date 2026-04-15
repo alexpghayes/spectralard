@@ -27,6 +27,7 @@ print.SpectralArdEstimate <- function(x, ...) {
 #'
 #' @return An `igraph` object.
 #' @export
+#' @inherit estimate_spectrum examples
 sample_graph <- function(object, allow_self_loops = FALSE, poisson_edges = FALSE, ...) {
   UseMethod("sample_graph")
 }
@@ -134,14 +135,20 @@ sample_graph.SpectralArdEstimate <- function(object,
 #'
 #' @export
 #' @examples
+#'
+#' set.seed(42)
+#'
+#' # 1. Simulate ARD data
 #' sim <- simulate_ard_data(
 #'   n = 100, k = 2, corr = 0.7,
 #'   num_good_traits = 2, num_bad_traits = 2
 #' )
 #'
-#' estimate <- estimate_spectrum(sim$Y, sim$traits)
+#' # 2. Estimate the network model
+#' estimate <- estimate_spectrum(sim$ard, sim$traits)
 #' estimate
 #'
+#' # 3. Sample a new graph from the estimate
 #' g <- sample_graph(estimate)
 #' g
 estimate_spectrum <- function(ard, traits) {
