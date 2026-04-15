@@ -14,9 +14,13 @@ Description: Estimates random dot product graphs from Aggregrated Relation
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports:
     cli,
-    fastRG
-URL: https://github.com/alexpghayes/spectralard
+    fastRG,
+    RSpectra,
+    withr
+Suggests:
+    pkgdown
+URL: https://github.com/alexpghayes/spectralard, https://alexpghayes.github.io/spectralard/
 BugReports: https://github.com/alexpghayes/spectralard/issues

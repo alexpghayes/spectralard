@@ -1,3 +1,8 @@
+#' Left-pad an integer sequence with zeros
+#'
+#' @param x A vector of integers.
+#' @return A character vector of the same length as `x`, left-padded with zeros.
+#' @keywords internal
 left_padded_sequence <- function(x) {
   original <- withr::with_options(
     c(scipen = 999),
@@ -8,16 +13,29 @@ left_padded_sequence <- function(x) {
   formatC(x, width = max_digits, format = "d", flag = "0")
 }
 
-#' Generate data with specified correlation to X
-#' @param y Vector to correlate with
-#' @param corr Target correlation value
-#' @return Vector with specified correlation to y
+#' Generate data with specified correlation to a vector
+#'
+#' @param y Vector to correlate with.
+#' @param corr Target correlation value (between -1 and 1).
+#' @return A vector with the specified correlation to `y`.
+#' @export
+#' @examples
+#' y <- rnorm(100)
+#' x <- complement(y, corr = 0.8)
+#' cor(x, y)
 complement <- function(y, corr = 0.5) {
-  x <- rnorm(length(y))
-  y.perp <- residuals(lm(x ~ y))
-  corr * sd(y.perp) * y + y.perp * sd(y) * sqrt(1 - corr^2)
+  x <- stats::rnorm(length(y))
+  y.perp <- stats::residuals(stats::lm(x ~ y))
+  corr * stats::sd(y.perp) * y + y.perp * stats::sd(y) * sqrt(1 - corr^2)
 }
 
+#' Generate traits correlated with latent positions
+#'
+#' @param U A matrix of latent positions.
+#' @param corr A numeric vector (or scalar) of correlations.
+#' @param num_traits The number of traits to generate.
+#' @return A matrix of traits.
+#' @keywords internal
 generate_traits <- function(U, corr, num_traits) {
   k <- ncol(U)
 
@@ -44,13 +62,25 @@ generate_traits <- function(U, corr, num_traits) {
   traits
 }
 
-simulate_ard_data <- function(sim_params) {
-  n <- sim_params$n
-  k <- sim_params$k
-  corr <- sim_params$corr
-  num_good_traits <- sim_params$num_good_traits
-  num_bad_traits <- sim_params$num_bad_traits
-
+#' Simulate Aggregated Relational Data (ARD)
+#'
+#' @param n Number of nodes.
+#' @param k Number of communities/latent dimensions.
+#' @param corr Correlation between traits and latent positions.
+#' @param num_good_traits Number of traits correlated with latent positions.
+#' @param num_bad_traits Number of traits uncorrelated with latent positions.
+#' @return A list with the following elements:
+#'   - `A`: The adjacency matrix.
+#'   - `Y`: The ARD matrix.
+#'   - `traits`: The node-level traits.
+#'   - `s_pop`: The population spectral decomposition.
+#' @export
+#' @examples
+#' sim <- simulate_ard_data(
+#'   n = 100, k = 2, corr = 0.7,
+#'   num_good_traits = 2, num_bad_traits = 2
+#' )
+simulate_ard_data <- function(n, k, corr, num_good_traits, num_bad_traits) {
   stopifnot(num_good_traits + num_bad_traits > 0)
 
   diagonal <- 0.5
@@ -58,9 +88,9 @@ simulate_ard_data <- function(sim_params) {
   B <- matrix(off_diagonal, nrow = k, ncol = k)
   diag(B) <- diagonal
   pi <- rep(1, k) / k
-  theta <- rexp(n) + 1
+  theta <- stats::rexp(n) + 1
 
-  network_model <- dcsbm(
+  network_model <- fastRG::dcsbm(
     theta = theta, # heterogeneous degrees
     B = B,
     pi = pi,
@@ -69,7 +99,9 @@ simulate_ard_data <- function(sim_params) {
     expected_degree = 2 * n^0.6
   )
 
-  s_pop <- svds(network_model)
+  # RSpectra::svds might be better but for now let's assume it's available
+  # or use fastRG equivalent if exists. fastRG models have a custom svds method.
+  s_pop <- RSpectra::svds(network_model, k = k)
 
   X <- s_pop$u %*% diag(sqrt(s_pop$d))
 
@@ -88,7 +120,7 @@ simulate_ard_data <- function(sim_params) {
 
   if (num_bad_traits > 0) {
     bad_traits <- matrix(
-      rnorm(n * num_bad_traits),
+      stats::rnorm(n * num_bad_traits),
       nrow = n,
       ncol = num_bad_traits
     )
@@ -101,7 +133,7 @@ simulate_ard_data <- function(sim_params) {
     traits <- cbind(traits, bad_traits)
   }
 
-  A <- sample_sparse(network_model)
+  A <- fastRG::sample_sparse(network_model)
   Y <- A %*% traits
 
   list(

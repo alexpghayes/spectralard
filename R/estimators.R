@@ -7,7 +7,7 @@ SpectralArdEstimate <- function(Utilde, Sigmatilde) {
 
 #' Estimate a low-rank network model from Aggregated Relational Data (ARD)
 #'
-#' @param ard A `matrix` containing Aggregrated Relational Data. Each row of `ard`
+#' @param ard A `matrix` containing Aggregated Relational Data. Each row of `ard`
 #'   corresponds to one node in the network, and each column represents an
 #'   aggregated trait. The order of the nodes (rows) and aggregated traits (columns)
 #'   should match `traits`. Missing data is not allowed.
@@ -17,12 +17,16 @@ SpectralArdEstimate <- function(Utilde, Sigmatilde) {
 #'   The order of the nodes (rows) and aggregated traits (columns) should match `ard`.
 #'   Missing data is not allowed.
 #'
-#' @returns A [SpectralARD] object.
+#' @returns A `SpectralArdEstimate` object.
 #'
 #' @export
 #' @examples
 #'
+#' sim <- simulate_ard_data(n = 100, k = 2, corr = 0.7,
+#'   num_good_traits = 2, num_bad_traits = 2)
 #'
+#' estimate <- estimate_spectrum(sim$Y, sim$traits)
+#' estimate
 estimate_spectrum <- function(ard, traits) {
   if (anyNA(ard)) {
     cli::cli_abort("{.arg ard} must be matrix without any `NA` entries.")
