@@ -18,9 +18,11 @@ RoxygenNote: 7.3.3
 Imports:
     cli,
     fastRG,
+    igraph,
     RSpectra,
     withr
 Suggests:
-    pkgdown
+    pkgdown,
+    testthat
 URL: https://github.com/alexpghayes/spectralard, https://alexpghayes.github.io/spectralard/
 BugReports: https://github.com/alexpghayes/spectralard/issues

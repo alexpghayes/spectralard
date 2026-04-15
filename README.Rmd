@@ -18,37 +18,60 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of spectralard is to ...
+The goal of `spectralard` is to provide efficient spectral estimation of low-rank network models from Aggregated Relational Data (ARD). 
 
 ## Installation
 
-You can install the development version of spectralard like so:
+You can install the development version of `spectralard` from [GitHub](https://github.com/alexpghayes/spectralard) with:
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+```r
+# install.packages("devtools")
+devtools::install_github("alexpghayes/spectralard")
 ```
 
-## Example
+## Features
 
-This is a basic example which shows you how to solve a common problem:
+- **Efficient Spectral Estimation**: Estimate latent positions and community structures directly from ARD using `estimate_spectrum()`.
+- **Sparse Graph Sampling**: Generate representative graphs from estimated models using `sample_graph()`, with support for large networks through memory-efficient chunked sampling.
+- **Model-Based Simulation**: Generate synthetic ARD datasets with controllable community structure and trait-latent correlations using `simulate_ard_data()`.
 
-```{r example}
+## Quick Start
+
+This example demonstrates how to simulate ARD data, estimate the underlying network model, and sample a new graph from that estimate.
+
+```r
 library(spectralard)
-## basic example code
+
+# 1. Simulate ARD data
+sim <- simulate_ard_data(
+  n = 1000,              # Number of nodes
+  k = 3,                 # Latent dimensions
+  corr = 0.8,            # Correlation between traits and latent positions
+  num_good_traits = 5,   # Informative traits
+  num_bad_traits = 2     # Uninformative traits
+)
+
+# 2. Estimate the network model
+estimate <- estimate_spectrum(sim$Y, sim$traits)
+print(estimate)
+
+# 3. Sample a new graph from the estimate
+g <- sample_graph(
+  estimate, 
+  allow_self_loops = FALSE, 
+  poisson_edges = FALSE
+)
+
+# The result is an igraph object
+print(g)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+## Documentation
 
-```{r cars}
-summary(cars)
-```
+For more detailed information, please visit the [package website](https://alexpghayes.github.io/spectralard/).
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+## References
 
-You can also embed plots, for example:
+This package implements the methods described in:
 
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+> Chandrasekhar, A. G., Hayes, A., McCormick, T. H., & Breza, E. (2026). Spectral Estimation of Low-Rank Models from Aggregated Relational Data.
