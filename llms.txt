@@ -12,3 +12,9 @@ Estimates random dot product graphs from Aggregrated Relation Data.
 - [`simulate_ard_data()`](https://alexpghayes.github.io/spectralard/reference/simulate_ard_data.md)
   : Simulate Aggregated Relational Data (ARD)
 
+# Articles
+
+### All vignettes
+
+- [Linear-in-Means Estimation with 2SLS and
+  ARD](https://alexpghayes.github.io/spectralard/articles/two-stage-least-squares.md):
