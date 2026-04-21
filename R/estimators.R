@@ -9,9 +9,12 @@ SpectralArdEstimate <- function(Utilde, Sigmatilde) {
 #' @method print SpectralArdEstimate
 print.SpectralArdEstimate <- function(x, ...) {
   cli::cli_h1("Spectral ARD Estimate")
-  cli::cli_inform(c(
-    "Nodes: {.val {nrow(x$Utilde)}}",
-    "Latent dimensions: {.val {ncol(x$Utilde)}}"
+  cli::cli_bullets(c(
+    "i" = "Nodes: {.val {nrow(x$Utilde)}}",
+    "i" = "Latent dimensions: {.val {ncol(x$Utilde)}}",
+    "v" = "Estimated components (access with {.code $}):",
+    "$" = "{.field Utilde}: {.val {nrow(x$Utilde)}} x {.val {ncol(x$Utilde)}} matrix",
+    "$" = "{.field Sigmatilde}: {.val {ncol(x$Utilde)}} x {.val {ncol(x$Utilde)}} matrix"
   ))
   invisible(x)
 }
@@ -28,17 +31,26 @@ print.SpectralArdEstimate <- function(x, ...) {
 #' @return An `igraph` object.
 #' @export
 #' @inherit estimate_spectrum examples
-sample_graph <- function(object, allow_self_loops = FALSE, poisson_edges = FALSE, ...) {
+sample_graph <- function(
+  object,
+  allow_self_loops = FALSE,
+  poisson_edges = FALSE,
+  ...
+) {
   UseMethod("sample_graph")
 }
 
 #' @export
-sample_graph.SpectralArdEstimate <- function(object,
-                                             allow_self_loops = FALSE,
-                                             poisson_edges = FALSE,
-                                             ...) {
+sample_graph.SpectralArdEstimate <- function(
+  object,
+  allow_self_loops = FALSE,
+  poisson_edges = FALSE,
+  ...
+) {
   if (!requireNamespace("igraph", quietly = TRUE)) {
-    cli::cli_abort("The {.pkg igraph} package is required to use {.fn sample_graph}.")
+    cli::cli_abort(
+      "The {.pkg igraph} package is required to use {.fn sample_graph}."
+    )
   }
 
   n <- nrow(object$Utilde)
@@ -148,15 +160,18 @@ sample_graph.SpectralArdEstimate <- function(object,
 #' estimate <- estimate_spectrum(sim$ard, sim$traits)
 #' estimate
 #'
+#' estimate_spectrum(sim$ard, sim$traits, khat = 2)
+#'
 #' # 3. Sample a new graph from the estimate
 #' g <- sample_graph(estimate)
 #' g
-estimate_spectrum <- function(ard, traits) {
-  if (anyNA(ard)) {
+#'
+estimate_spectrum <- function(ard, traits, khat = NULL) {
+  if ((!is.matrix(ard) && !inherits(ard, "Matrix")) || anyNA(ard)) {
     cli::cli_abort("{.arg ard} must be matrix without any `NA` entries.")
   }
 
-  if (anyNA(traits)) {
+  if ((!is.matrix(traits) && !inherits(traits, "Matrix")) || anyNA(traits)) {
     cli::cli_abort("{.arg traits} must be matrix without any `NA` entries.")
   }
 
@@ -165,7 +180,12 @@ estimate_spectrum <- function(ard, traits) {
       "{.arg ard} and {.arg traits} must have the same number of rows and columns"
     )
   }
-  s_ard <- svd(ard)
+
+  if (is.null(khat)) {
+    khat <- ncol(traits)
+  }
+
+  s_ard <- svd(ard, nu = khat, nv = khat)
 
   Utilde <- s_ard$u
 
