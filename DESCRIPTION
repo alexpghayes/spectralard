@@ -9,7 +9,7 @@ Authors@R: c(
     person("Tyler", "McCormick", , "tylermc@uw.edu", role = "aut"),
     person("Emily", "Breza", , "arungc@stanford.edu", role = "aut")
   )
-Description: Estimates random dot product graphs from Aggregrated Relation
+Description: Estimates random dot product graphs from Aggregated Relation
     Data.
 License: MIT + file LICENSE
 Encoding: UTF-8
