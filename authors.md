@@ -18,13 +18,13 @@ Source:
 
 Hayes A, Chandrasekhar A, McCormick T, Breza E (2026). *spectralard:
 Spectral Estimation of Low-Rank Models from Aggregated Relational Data
-(ARD)*. R package version 0.0.0.9000,
+(ARD)*. R package version 0.0.0.9002,
 <https://github.com/alexpghayes/spectralard>.
 
     @Manual{,
       title = {spectralard: Spectral Estimation of Low-Rank Models from Aggregated Relational Data (ARD)},
       author = {Alex Hayes and Arun Chandrasekhar and Tyler McCormick and Emily Breza},
       year = {2026},
-      note = {R package version 0.0.0.9000},
+      note = {R package version 0.0.0.9002},
       url = {https://github.com/alexpghayes/spectralard},
     }
