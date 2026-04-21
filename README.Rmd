@@ -100,3 +100,6 @@ $0.8$ correlation between traits and latent positions, and the presence
 of uninformative traits, the spectral estimation accurately identifies
 the underlying blocks.
 
+## Related work
+
+https://github.com/mpleung/ARD, https://github.com/ahoundetoungan/PartialNetwork, AER 2020 replication package https://www.aeaweb.org/articles?id=10.1257/aer.20170861
