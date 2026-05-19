@@ -1,6 +1,7 @@
 # Linear-in-Means Estimation with 2SLS and ARD
 
 ``` r
+
 library(spectralard)
 library(Matrix)
 library(ivreg)
@@ -9,29 +10,33 @@ library(ivreg)
 ## Introduction
 
 In this vignette, we demonstrate how to perform linear-in-means
-estimation of peer effects when the network adjacency matrix $G$ is
-unknown. Instead of $G$, we only observe Aggregated Relational Data
+estimation of peer effects when the network adjacency matrix $`G`$ is
+unknown. Instead of $`G`$, we only observe Aggregated Relational Data
 (ARD), which we use to estimate the network’s spectral structure. We
 then use this estimate to construct instruments for a two-stage least
 squares (2SLS) estimation using the `ivreg` package.
 
 ## The Linear-in-Means Model
 
-Consider the standard linear-in-means model for an outcome $y$:
+Consider the standard linear-in-means model for an outcome $`y`$:
 
-$$y = \alpha\iota + \beta Gy + \gamma W + \delta GW + \eta X + \epsilon$$
+``` math
+y = \alpha \iota + \beta G y + \gamma W + \delta G W + \eta X + \epsilon
+```
 
-where: - $G$ is the row-normalized adjacency matrix. - $W$ is a vector
-of node-level exogenous covariates. - $X$ are the latent positions from
-the underlying network model. - $Gy$ represents the endogenous peer
-effect. - $GW$ represents the contextual effects.
+where: - $`G`$ is the row-normalized adjacency matrix. - $`W`$ is a
+vector of node-level exogenous covariates. - $`X`$ are the latent
+positions from the underlying network model. - $`Gy`$ represents the
+endogenous peer effect. - $`GW`$ represents the contextual effects.
 
 ## Simulation Setup
 
 First, we simulate a network and ARD using the package’s built-in
-simulation tools. We use $n = 1000$ nodes and $k = 2$ latent dimensions.
+simulation tools. We use $`n = 1000`$ nodes and $`k = 2`$ latent
+dimensions.
 
 ``` r
+
 set.seed(42)
 n <- 1000
 k <- 2
@@ -73,10 +78,11 @@ y <- as.numeric(solve(I - beta * G, rhs))
 ## Spectral ARD Estimation
 
 Next, we estimate the network spectral structure from the ARD. We assume
-that the node degrees (row sums of $A$) are known and use them to
+that the node degrees (row sums of $`A`$) are known and use them to
 normalize our spectral estimate.
 
 ``` r
+
 estimate <- estimate_spectrum(ard, traits)
 
 # Extract estimated components
@@ -93,11 +99,12 @@ G_hat <- P_tilde / row_sums
 
 ## 2SLS Estimation
 
-We use ${\widehat{G}}^{2}W$ and $\widehat{G}X$ as instruments for the
-endogenous peer effect $Gy$. We also include $W$, $GW$, and the latent
-positions $X$ as covariates.
+We use $`\hat{G}^2 W`$ and $`\hat{G} X`$ as instruments for the
+endogenous peer effect $`Gy`$. We also include $`W`$, $`GW`$, and the
+latent positions $`X`$ as covariates.
 
 ``` r
+
 # Prepare peer effects and instruments
 Gy <- as.numeric(G %*% y)
 Gw <- as.numeric(G %*% W)
@@ -153,8 +160,8 @@ summary(model_2sls)
 
 ## Conclusion
 
-By substituting the spectral estimate $\widehat{G}$ for the unknown
-row-normalized adjacency matrix $G$, and leveraging known degrees, we
+By substituting the spectral estimate $`\hat{G}`$ for the unknown
+row-normalized adjacency matrix $`G`$, and leveraging known degrees, we
 can successfully recover peer effect estimates. Including latent
 positions and their estimated neighborhood averages as instruments
 significantly aids identification.

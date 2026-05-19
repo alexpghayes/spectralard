@@ -9,6 +9,7 @@ You can install the development version of `spectralard` from
 [GitHub](https://github.com/alexpghayes/spectralard) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("alexpghayes/spectralard")
 ```
@@ -36,6 +37,7 @@ This example demonstrates how to simulate ARD data, estimate the
 underlying network model, and analyze the results.
 
 ``` r
+
 library(spectralard)
 
 # 1. Simulate ARD data
@@ -53,6 +55,7 @@ The estimation returns a spectral decomposition of the underlying
 network model.
 
 ``` r
+
 # 2. Estimate the network model
 estimate <- estimate_spectrum(sim$ard, sim$traits)
 
@@ -77,6 +80,7 @@ We can use the estimated latent positions `Utilde` to recover community
 structure (e.g., via k-means clustering) or sample new graphs.
 
 ``` r
+
 # 3. Find blocks using k-means on Utilde
 clusters <- kmeans(estimate$Utilde, centers = 3)
 
@@ -119,8 +123,8 @@ g
 
 The Adjusted Rand Index (ARI) of 1.0 indicates that the clustering
 perfectly recovers the true community structure from the noisy ARD. Even
-with only $0.8$ correlation between traits and latent positions, and the
-presence of uninformative traits, the spectral estimation accurately
+with only $`0.8`$ correlation between traits and latent positions, and
+the presence of uninformative traits, the spectral estimation accurately
 identifies the underlying blocks.
 
 # Package index
